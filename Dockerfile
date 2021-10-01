@@ -2,7 +2,7 @@ FROM jekyll/minimal:4
 
 LABEL org.opencontainers.image.authors="Pétur Þór Valdimarsson <petur.valdimarsson@chorus.se>"
 LABEL maintainer="Pétur Þór Valdimarsson <petur.valdimarsson@chorus.se>"
-LABEL org.opencontainers.image.description="Image for building FHIR Implementation guides with the IG Publisher. \
+LABEL org.opencontainers.image.description="Image for building (FSH-based)FHIR Implementation guides with the IG Publisher. \
     The image contains a pre-downloaded version of publisher.jar in /fhir/input-cache \
     It is suggested to use the /builds volume as base for the fsh-tank. \
     As is, the input-cache needs to be symlinked to the fsh-tank directory since the path to input-cache cannot be overridden. \
