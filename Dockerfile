@@ -1,18 +1,45 @@
-FROM docker:20-git
+FROM jekyll/minimal:4
 
-MAINTAINER Pétur Þór Valdimarsson <petur.valdimarsson@chorus.se>
+LABEL org.opencontainers.image.authors="Pétur Þór Valdimarsson <petur.valdimarsson@chorus.se>"
+LABEL maintainer="Pétur Þór Valdimarsson <petur.valdimarsson@chorus.se>"
+LABEL org.opencontainers.image.description="Image for building FHIR Implementation guides with the IG Publisher. \
+    The image contains a pre-downloaded version of publisher.jar in /fhir/input-cache \
+    It is suggested to use the /builds volume as base for the fsh-tank. \
+    As is, the input-cache needs to be symlinked to the fsh-tank directory since the path to input-cache cannot be overridden. \
+    \
+    /root/.fhir is exposed as a volume"
 
-RUN apk add --update \
+RUN /bin/sh -c set -eux; sed -i -e 's/v2\.5/latest-stable/g' /etc/apk/repositories
+RUN /bin/sh -c set -eux; apk upgrade --available
+RUN /bin/sh -c set -eux; apk add --update \
+    curl \
     bash \
-    libstdc++=10.3.1_git20210424-r2 \
-    openjdk11=11.0.11_p9-r0 \
-    nodejs=14.17.6-r0 \
-    ruby-full=2.7.4-r0 \
-    ruby-dev=2.7.4-r0 \
-    ruby-bundler \
+    git \
+    openjdk11 \
+    fontconfig \
+    ttf-dejavu \
     && rm -rf /var/cache/apk/*
 
-RUN gem install -N jekyll -- --without-openssl-config --without-cryptolib
+RUN ln -s /usr/lib/libfontconfig.so.1 /usr/lib/libfontconfig.so && \
+    ln -s /lib/libuuid.so.1 /usr/lib/libuuid.so.1 && \
+    ln -s /lib/libc.musl-x86_64.so.1 /usr/lib/libc.musl-x86_64.so.1
 
-RUN mkdir /app
-WORKDIR /app
+ENV LD_LIBRARY_PATH /usr/lib
+
+RUN /bin/sh -c set -eux; mkdir -p /fhir/input-cache
+RUN /bin/sh -c set -eux; mkdir -p /root/.fhir
+
+VOLUME /fhir/input-cache
+VOLUME /builds
+VOLUME /cache
+VOLUME /root/.fhir
+
+WORKDIR /fhir
+
+COPY publisher/* .
+RUN /bin/sh -c set -eux; /bin/bash _updatePublisher.sh -y
+
+# Set entrypoint to bash
+ENTRYPOINT ["/bin/bash", "-c"]
+# Run a bash shell by default:
+CMD [""]
