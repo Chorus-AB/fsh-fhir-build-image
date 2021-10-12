@@ -1,0 +1,25 @@
+{
+  "name": "fsh-tank",
+  "version": "1.0.0",
+  "description": "Wrapper for FSH tank",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "serve": "http-server output",
+    "build": "yarn clean && yarn ig",
+    "generate": "yarn clean && yarn fsh",
+    "ig": "./_genonce.sh",
+    "fsh": "sushi .",
+    "clean": "yarn clean:temp && yarn clean:output && yarn clean:generated",
+    "clean:temp": "rm -rf temp || true",
+    "clean:output": "rm -rf output || true",
+    "clean:generated": "rm -rf fsh-generated || true",
+    "pre:getPublisher": "./_updatePublisher.sh -y"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "fsh-sushi": "^2.1.1",
+    "http-server": "^13.0.2"
+  }
+}

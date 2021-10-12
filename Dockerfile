@@ -34,12 +34,19 @@ VOLUME /builds
 VOLUME /cache
 VOLUME /root/.fhir
 
-WORKDIR /fhir
+RUN /bin/sh -c set -eux; mkdir -p /initialize
+COPY initialize.sh /initialize
+COPY package.json /initialize
 
+WORKDIR /fhir
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 COPY publisher/* .
 RUN /bin/sh -c set -eux; /bin/bash _updatePublisher.sh -y
 
+WORKDIR /builds
+
 # Set entrypoint to bash
-ENTRYPOINT ["/bin/bash", "-c"]
-# Run a bash shell by default:
-CMD [""]
+ENTRYPOINT ["/initialize/initialize.sh"]
+
+# Nothing run by default
+CMD ["initialize"]
