@@ -19,7 +19,7 @@ if test -e "$publisher"; then
 	java -jar $publisher -ig . $txoption $*
 
 else
-	publisher=./$publisher_jar
+	publisher=../$publisher_jar
 	if test -e "$publisher"; then
 		java -jar $publisher -ig . $txoption $*
 	else

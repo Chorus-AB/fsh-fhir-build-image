@@ -21,13 +21,17 @@ if [ $# -eq 0 ] || [ "$1" = "initialize" ]; then
   init_directory
 else
   echo "Running 'yarn $*'"
-  if [ ! -e "./input-cache/publisher.jar" ] && [ ! -e "./publisher.jar" ]; then
-    echo "Linking publisher"
-    ln -s /fhir/input-cache/publisher.jar ./publisher.jar
+  if [ ! -e "./input-cache/publisher.jar" ] && [ ! -e "../publisher.jar" ]; then
+    echo "Linking publisher to parent"
+    ln -s /fhir/input-cache/publisher.jar ../publisher.jar
   fi
   yarn "$*"
   if [ -L "./input-cache/publisher.jar" ]; then
       echo "Un-linking publisher"
-      rm ./publisher.jar
+      rm ./input-cache/publisher.jar
   fi
+  if [ -L "../publisher.jar" ]; then
+        echo "Un-linking publisher from parent"
+        rm ../publisher.jar
+    fi
 fi
