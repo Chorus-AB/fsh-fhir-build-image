@@ -15,12 +15,12 @@ fi
 echo "$txoption"
 
 publisher=$input_cache_path/$publisher_jar
-if test -f "$publisher"; then
+if test -e "$publisher"; then
 	java -jar $publisher -ig . $txoption $*
 
 else
 	publisher=../$publisher_jar
-	if test -f "$publisher"; then
+	if test -e "$publisher"; then
 		java -jar $publisher -ig . $txoption $*
 	else
 		echo IG Publisher NOT FOUND in input-cache or parent folder.  Please run _updatePublisher.  Aborting...
