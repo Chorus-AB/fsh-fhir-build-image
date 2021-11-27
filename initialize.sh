@@ -13,7 +13,6 @@ init_directory() {
   (cd "$TANK_DIR" || exit ; mv -- * .[^.]* ..)
   rmdir "$TANK_DIR"
   mkdir input-cache
-#  cp /fhir/input-cache/publisher.jar input-cache/
 }
 
 link_publisher() {
@@ -21,8 +20,6 @@ link_publisher() {
       echo "Linking publisher to parent"
       ln -s /fhir/input-cache/publisher.jar ../publisher.jar
   fi
-  pwd
-  ls ..
 }
 unlink_publisher() {
   if [ -L "./input-cache/publisher.jar" ]; then
@@ -33,8 +30,6 @@ unlink_publisher() {
     echo "Un-linking publisher from parent"
     rm ../publisher.jar
   fi
-  pwd
-  ls ..
 }
 
 echo "Running $_ $*"
