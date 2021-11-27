@@ -29,7 +29,6 @@ ENV LD_LIBRARY_PATH /usr/lib
 RUN /bin/sh -c set -eux; mkdir -p /fhir/input-cache
 RUN /bin/sh -c set -eux; mkdir -p /root/.fhir
 
-VOLUME /fhir/input-cache
 VOLUME /builds
 VOLUME /cache
 VOLUME /root/.fhir
