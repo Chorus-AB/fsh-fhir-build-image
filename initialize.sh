@@ -1,5 +1,6 @@
 #!/bin/bash
 init_directory() {
+  echo "Initializing directory"
   if [ -n "$(ls -A . | grep -v 'initialize' 2>/dev/null)" ]
   then
     echo "Please initialize in an empty directory"
@@ -15,23 +16,33 @@ init_directory() {
 #  cp /fhir/input-cache/publisher.jar input-cache/
 }
 
-echo "Running $_ $*"
-if [ $# -eq 0 ] || [ "$1" = "initialize" ]; then
-  echo "Initializing directory"
-  init_directory
-else
-  echo "Running 'yarn $*'"
+link_publisher() {
   if [ ! -e "./input-cache/publisher.jar" ] && [ ! -e "../publisher.jar" ]; then
-    echo "Linking publisher to parent"
-    ln -s /fhir/input-cache/publisher.jar ../publisher.jar
+      echo "Linking publisher to parent"
+      ln -s /fhir/input-cache/publisher.jar ../publisher.jar
   fi
-  yarn "$*"
+  pwd
+  ls ..
+}
+unlink_publisher() {
   if [ -L "./input-cache/publisher.jar" ]; then
-      echo "Un-linking publisher"
-      rm ./input-cache/publisher.jar
+    echo "Un-linking publisher"
+    rm ./input-cache/publisher.jar
   fi
   if [ -L "../publisher.jar" ]; then
-        echo "Un-linking publisher from parent"
-        rm ../publisher.jar
-    fi
+    echo "Un-linking publisher from parent"
+    rm ../publisher.jar
+  fi
+  pwd
+  ls ..
+}
+
+echo "Running $_ $*"
+if [ $# -eq 0 ] || [ "$1" = "initialize" ]; then
+  init_directory
+else
+  link_publisher
+  echo "Running 'yarn $*'"
+  yarn "$*"
+  unlink_publisher
 fi
