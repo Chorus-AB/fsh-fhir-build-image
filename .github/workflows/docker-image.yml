@@ -12,10 +12,9 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-    - name: Log into registry ${{ vars.REGISTRY }}
+    - name: Log into docker registry
       uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
       with:
-        registry: ${{ vars.REGISTRY }}
         username: ${{ vars.REGISTRY_USER }}
         password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
     - uses: actions/checkout@v3
