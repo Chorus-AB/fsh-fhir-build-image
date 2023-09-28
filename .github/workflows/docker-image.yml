@@ -10,9 +10,7 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-latest
-    env:
-      TS: ${{ date +%s }}
+    runs-on: ubuntu-lates
     steps:
     - name: Log into registry ${{ env.REGISTRY }}
       uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
@@ -21,10 +19,9 @@ jobs:
         username: ${{ env.REGISTRY_USER }}
         password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: ./build.sh "0.9.${{env.TS}}"
-    - name: Push the Docker image
 # TODO: Use tags instead
-      run: docker push chorusab/fsh-fhir-build-image:0.9.${{env.TS}}
-    - name: Push latest tag Docker
-      run: docker push chorusab/fsh-fhir-build-image:latest
+    - name: Build the Docker image
+      run: ./build.sh "0.9.$(date +%s)"
+    - name: Push the Docker image
+      run: |
+        docker push chorusab/fsh-fhir-build-image
