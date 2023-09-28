@@ -20,7 +20,8 @@ jobs:
     - uses: actions/checkout@v3
 # TODO: Use tags instead
     - name: Build the Docker image
-      run: ./build.sh "0.9.$(date +%s)"
+      run: |
+        docker build -f Dockerfile -t chorusab/fsh-fhir-build-image:"0.9.$(date +%s)" -t chorusab/fsh-fhir-build-image:latest .
     - name: Push the Docker image
       run: |
         docker push chorusab/fsh-fhir-build-image
