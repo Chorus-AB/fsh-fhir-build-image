@@ -10,7 +10,7 @@ jobs:
 
   build:
 
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
     - name: Log into registry ${{ env.REGISTRY }}
       uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
