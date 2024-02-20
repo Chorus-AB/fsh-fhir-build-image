@@ -41,3 +41,4 @@ All commands but initialize are forwarded to yarn, so see package.json for detai
 
 ### TODO
 * Include plantuml
+* periodical build
