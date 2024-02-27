@@ -9,6 +9,9 @@ LABEL org.opencontainers.image.description="Image for building (FSH-based)FHIR I
     \
     /root/.fhir is exposed as a volume"
 
+ENV DOTNET_ROOT /usr/share/dotnet
+ENV PATH $PATH:$DOTNET_ROOT:/root/.dotnet/tools
+
 RUN /bin/sh -c set -eux; sed -i -e 's/v2\.5/latest-stable/g' /etc/apk/repositories
 RUN /bin/sh -c set -eux; apk upgrade --available
 RUN /bin/sh -c set -eux; apk add --update \
@@ -18,7 +21,19 @@ RUN /bin/sh -c set -eux; apk add --update \
     openjdk11 \
     fontconfig \
     ttf-dejavu \
-    && rm -rf /var/cache/apk/*
+    icu-libs \
+    krb5-libs \
+    libgcc \
+    libintl \
+    libintl \
+    libintl \
+    libintl && \
+    wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh && \
+    chmod +x ./dotnet-install.sh && \
+    ./dotnet-install.sh --channel 6.0 --install-dir /usr/share/dotnet && \
+    dotnet tool install -g firely.terminal && \
+    rm -rf /var/cache/apk/* ./dotnet-install.sh
+
 
 RUN ln -s /usr/lib/libfontconfig.so.1 /usr/lib/libfontconfig.so && \
     ln -s /lib/libuuid.so.1 /usr/lib/libuuid.so.1 && \
